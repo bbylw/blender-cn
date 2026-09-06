@@ -21,6 +21,7 @@ const run = (cmd, opts = {}) => {
 };
 
 const AUTH = '-c user.name=bbylw -c user.email=bbylw521@gmail.com';
+const GIT_AUTH = `git ${AUTH}`; // 全局选项必须跟在 git 可执行文件之后
 
 console.log('== 1/3 构建站点 ==');
 run('bun run build');
@@ -32,10 +33,10 @@ try {
   for (const entry of readdirSync('dist')) {
     cpSync(join('dist', entry), join(dir, entry), { recursive: true });
   }
-  run(`${AUTH} git init -b gh-pages`, { cwd: dir });
-  run(`${AUTH} git add -A`, { cwd: dir });
+  run(`${GIT_AUTH} init -b gh-pages`, { cwd: dir });
+  run(`${GIT_AUTH} add -A`, { cwd: dir });
   const stamp = new Date().toISOString().slice(0, 10);
-  run(`${AUTH} git commit -m "deploy: static site ${stamp}" --quiet`, { cwd: dir });
+  run(`${GIT_AUTH} commit -m "deploy: static site ${stamp}" --quiet`, { cwd: dir });
 
   console.log(`== 3/3 推送到 ${remote} (gh-pages) ==`);
   run(`git remote add origin ${remote}`, { cwd: dir });
