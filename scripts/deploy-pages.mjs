@@ -8,7 +8,7 @@
  * 前置：已在 GitHub 上启用 Pages 并选择分支 gh-pages（或用下方 API 命令启用）。
  */
 import { execSync } from 'node:child_process';
-import { cpSync, mkdtempSync, rmSync } from 'node:fs';
+import { cpSync, mkdtempSync, readdirSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -28,7 +28,10 @@ run('bun run build');
 const dir = mkdtempSync(join(tmpdir(), 'blender-cn-deploy-'));
 try {
   console.log('== 2/3 准备 gh-pages 分支内容 ==');
-  cpSync('dist', dir, { recursive: true });
+  // 把 dist 的内容（而非 dist 目录本身）复制进临时目录
+  for (const entry of readdirSync('dist')) {
+    cpSync(join('dist', entry), join(dir, entry), { recursive: true });
+  }
   run(`${AUTH} git init -b gh-pages`, { cwd: dir });
   run(`${AUTH} git add -A`, { cwd: dir });
   const stamp = new Date().toISOString().slice(0, 10);
