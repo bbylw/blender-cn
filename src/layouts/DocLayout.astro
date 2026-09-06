@@ -1,0 +1,276 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { GROUP_LABELS, neighbors, type DocItem, type GroupKey } from '../lib/docs';
+
+interface Props {
+  doc: DocItem;
+  docs: DocItem[];
+}
+const { doc, docs } = Astro.props;
+const { prev, next } = neighbors(docs, doc.slug);
+const groups: GroupKey[] = ['manual', 'dev'];
+const groupTitles: Record<GroupKey, string> = GROUP_LABELS;
+---
+
+<BaseLayout title={doc.title} description={doc.description}>
+  <!-- 阅读进度条 -->
+  <div class="pointer-events-none fixed inset-x-0 top-16 z-50 h-[2px]">
+    <div
+      id="reading-progress"
+      class="h-full origin-left scale-x-0 bg-gradient-to-r from-brand-300 via-brand-500 to-brand-400"
+      style="filter: drop-shadow(0 1px 4px rgb(245 121 42 / 0.45))"
+    />
+  </div>
+
+  <div class="container-page py-10 lg:py-14">
+    <!-- 面包屑 -->
+    <nav class="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[13px] text-zinc-500" aria-label="面包屑">
+      <a href="/" class="transition-colors hover:text-brand-300">首页</a>
+      <span aria-hidden="true">/</span>
+      <a href="/docs/" class="transition-colors hover:text-brand-300">文档中心</a>
+      <span aria-hidden="true">/</span>
+      <span class="text-zinc-300">{groupTitles[doc.group]}</span>
+    </nav>
+
+    <div class="mt-6 grid gap-12 xl:grid-cols-[232px_minmax(0,1fr)_208px]">
+      <!-- 左侧：栏目导航 -->
+      <aside class="hidden xl:block" aria-label="文档目录导航">
+        <div class="sticky top-24 max-h-[calc(100vh-7.5rem)] overflow-y-auto pb-10 pr-2">
+          {groups.map((g) => (
+            <div class:list={['mb-7', doc.group === g ? '' : 'opacity-70']}>
+              <div class="mb-2.5">
+                <h2 class="text-[11px] font-bold uppercase tracking-[0.18em] text-zinc-500">{groupTitles[g]}</h2>
+                <div class="mt-1 h-px w-full bg-gradient-to-r from-white/12 to-transparent" />
+              </div>
+              <ul class="space-y-0.5">
+                {docs.filter((d) => d.group === g).map((d) => (
+                  <li>
+                    <a
+                      href={d.href}
+                      aria-current={d.slug === doc.slug ? 'page' : undefined}
+                      class:list={[
+                        'group flex items-center gap-2 rounded-lg px-2.5 py-2 text-[13.5px] font-medium leading-snug transition-colors',
+                        d.slug === doc.slug
+                          ? 'bg-brand-500/12 text-brand-300 ring-1 ring-inset ring-brand-500/25'
+                          : 'text-zinc-400 hover:bg-white/5 hover:text-zinc-100',
+                      ]}
+                    >
+                      <Icon
+                        name={d.icon}
+                        size={15}
+                        class:list={[
+                          'transition-colors',
+                          d.slug === doc.slug ? 'text-brand-400' : 'text-zinc-600 group-hover:text-zinc-400',
+                        ]}
+                      />
+                      <span class="min-w-0">{d.title}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </aside>
+
+      <!-- 正文 -->
+      <article class="min-w-0">
+        <header>
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="icon-tile h-12 w-12">
+              <Icon name={doc.icon} size={24} />
+            </span>
+            <div class="flex flex-wrap items-center gap-2">
+              <p class="kicker text-brand-500">{groupTitles[doc.group]}</p>
+              <span class="h-3 w-px bg-white/10" aria-hidden="true" />
+              <p class="text-xs font-medium uppercase tracking-wider text-zinc-500">{doc.updated}</p>
+            </div>
+          </div>
+          <h1 class="mt-5 text-3xl font-bold tracking-tight text-white sm:text-[2.6rem] sm:leading-[1.12]">{doc.title}</h1>
+          <p class="mt-4 max-w-2xl text-[17px] leading-8 text-zinc-400">{doc.description}</p>
+        </header>
+
+        <!-- 移动端：本页目录 -->
+        <nav id="mobile-toc" class="mt-6 hidden lg:hidden" aria-label="本页目录">
+          <p class="mb-2 text-[11px] font-bold uppercase tracking-[0.18em] text-zinc-500">本页目录</p>
+          <ul class="flex gap-2 overflow-x-auto pb-1" />
+        </nav>
+
+        <!-- Markdown 正文 -->
+        <div id="doc-body" class="prose-doc mt-8">
+          <slot />
+        </div>
+
+        <!-- 官方参考 -->
+        {doc.source && (
+          <a
+            href={doc.source.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group mt-12 flex items-center justify-between gap-4 rounded-2xl border border-brand-500/25 bg-gradient-to-r from-brand-500/10 to-transparent px-5 py-4 transition-colors hover:border-brand-400/50"
+          >
+            <span>
+              <span class="block text-sm font-semibold text-brand-300">官方参考</span>
+              <span class="mt-0.5 block text-[13px] text-zinc-400">{doc.source.label}（可能仅提供英文原文）</span>
+            </span>
+            <Icon
+              name="arrowUpRight"
+              size={20}
+              class="shrink-0 text-brand-400 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+            />
+          </a>
+        )}
+
+        <!-- 上下篇 -->
+        <nav class="mt-10 grid gap-4 sm:grid-cols-2" aria-label="上一篇与下一篇">
+          {prev ? (
+            <a
+              href={prev.href}
+              class="group rounded-2xl border border-white/8 bg-white/[0.03] p-5 transition-colors hover:border-brand-500/40 hover:bg-brand-500/5"
+            >
+              <span class="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+                <Icon name="arrowLeft" size={14} class="transition-transform group-hover:-translate-x-0.5" />
+                上一篇
+              </span>
+              <span class="mt-2 block font-semibold text-zinc-100 transition-colors group-hover:text-brand-300">{prev.title}</span>
+              <span class="mt-0.5 block truncate text-xs text-zinc-600">{prev.tagline}</span>
+            </a>
+          ) : (
+            <span />
+          )}
+          {next ? (
+            <a
+              href={next.href}
+              class="group rounded-2xl border border-white/8 bg-white/[0.03] p-5 text-right transition-colors hover:border-brand-500/40 hover:bg-brand-500/5 sm:col-start-2"
+            >
+              <span class="flex items-center justify-end gap-1.5 text-xs font-semibold uppercase tracking-wider text-zinc-500">
+                下一篇
+                <Icon name="arrowRight" size={14} class="transition-transform group-hover:translate-x-0.5" />
+              </span>
+              <span class="mt-2 block font-semibold text-zinc-100 transition-colors group-hover:text-brand-300">{next.title}</span>
+              <span class="mt-0.5 block truncate text-xs text-zinc-600">{next.tagline}</span>
+            </a>
+          ) : (
+            <span />
+          )}
+        </nav>
+      </article>
+
+      <!-- 右侧：TOC（由客户端脚本根据正文标题生成） -->
+      <aside class="hidden xl:block" aria-label="本页目录">
+        <nav id="side-toc" class="sticky top-24 max-h-[calc(100vh-7.5rem)] overflow-y-auto pb-10">
+          <p class="mb-3 text-[11px] font-bold uppercase tracking-[0.18em] text-zinc-500">本页目录</p>
+          <ul class="space-y-0.5 border-l border-white/8" />
+        </nav>
+      </aside>
+    </div>
+  </div>
+
+  <!-- 返回顶部 -->
+  <button
+    id="back-to-top"
+    type="button"
+    class="fixed bottom-6 right-6 z-40 hidden h-11 w-11 place-items-center rounded-full border border-white/10 bg-ink-900/90 text-zinc-300 shadow-lg shadow-black/40 backdrop-blur transition-all hover:border-brand-500/50 hover:text-brand-300"
+    aria-label="返回顶部"
+  >
+    <Icon name="arrowUp" size={19} />
+  </button>
+</BaseLayout>
+
+<script>
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const body = document.getElementById('doc-body');
+  const bar = document.getElementById('reading-progress');
+
+  // ---------- 阅读进度 ----------
+  function paintProgress() {
+    if (!body || !bar) return;
+    const rect = body.getBoundingClientRect();
+    const start = 120; // 顶部留白补偿
+    const max = body.scrollHeight - window.innerHeight + 160;
+    const cur = Math.min(Math.max(-rect.top - start, 0), max);
+    const pct = max > 0 ? cur / max : 0;
+    bar.style.transform = `scaleX(${pct.toFixed(3)})`;
+  }
+
+  // ---------- 生成目录（右侧树 + 移动端胶囊共用） ----------
+  const headings = Array.from(body?.querySelectorAll('h2, h3') ?? []).filter((h) => h.id);
+  const sideList = document.querySelector('#side-toc ul');
+  const mobileTocList = document.querySelector('#mobile-toc ul');
+  const mobileToc = document.getElementById('mobile-toc');
+  const linkByHeading = new Map();
+
+  headings.forEach((h) => {
+    const isH3 = h.tagName === 'H3';
+    const a = document.createElement('a');
+    a.href = `#${encodeURIComponent(h.id)}`;
+    a.textContent = h.textContent ?? '';
+    a.className = isH3
+      ? 'block border-l-2 border-transparent py-[3px] pl-6 pr-2 text-[12.5px] leading-snug text-zinc-500 transition-colors hover:text-brand-300'
+      : 'block border-l-2 border-transparent py-1 pl-3 pr-2 text-[13px] font-medium leading-snug text-zinc-400 transition-colors hover:text-brand-300';
+    const li = document.createElement('li');
+    li.appendChild(a);
+    sideList?.appendChild(li);
+    linkByHeading.set(h, a);
+
+    // 移动端胶囊
+    if (mobileTocList) {
+      const ca = document.createElement('a');
+      ca.href = a.href;
+      ca.textContent = h.textContent ?? '';
+      ca.className =
+        'inline-block shrink-0 whitespace-nowrap rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-[13px] text-zinc-400 transition-colors hover:border-brand-500/50 hover:text-brand-300';
+      const liChip = document.createElement('li');
+      liChip.appendChild(ca);
+      mobileTocList.appendChild(liChip);
+    }
+  });
+
+  if (headings.length === 0) {
+    document.getElementById('side-toc')?.remove();
+  } else if (mobileToc) {
+    mobileToc.classList.remove('hidden');
+  }
+
+  // 滚动高亮当前章节
+  if (headings.length > 0 && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        const target = visible[0]?.target as Element | undefined;
+        if (!target) return;
+        linkByHeading.forEach((link, h) => {
+          const on = h === target;
+          link.classList.toggle('text-brand-300', on);
+          link.classList.toggle('border-brand-500', on);
+          if (on) link.setAttribute('aria-current', 'location');
+          else link.removeAttribute('aria-current');
+        });
+      },
+      { rootMargin: '-72px 0px -62% 0px', threshold: 0 }
+    );
+    headings.forEach((h) => io.observe(h));
+  }
+
+  // ---------- 返回顶部 ----------
+  const backTop = document.getElementById('back-to-top');
+  function paintBackTop() {
+    if (!backTop) return;
+    backTop.classList.toggle('hidden', window.scrollY <= 640);
+  }
+  backTop?.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: prefersReduced ? 'auto' : 'smooth' });
+  });
+
+  // ---------- 事件绑定 ----------
+  const onScroll = () => {
+    paintProgress();
+    paintBackTop();
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  paintProgress();
+  paintBackTop();
+</script>

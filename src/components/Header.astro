@@ -1,0 +1,149 @@
+---
+import Icon from './Icon.astro';
+
+const { pathname } = Astro.url;
+
+const links = [
+  { href: '/', label: '首页' },
+  { href: '/docs/', label: '文档中心' },
+  { href: '/docs/build', label: '从源码构建' },
+  { href: '/docs/contribute', label: '参与贡献' },
+  { href: '/docs/license', label: '许可证' },
+];
+
+function isActive(href: string): boolean {
+  if (href === '/') return pathname === '/';
+  return pathname === href || pathname.startsWith(href + '/') || (href === '/docs/' && pathname.startsWith('/docs/'));
+}
+---
+
+<header class="sticky top-0 z-40 border-b border-white/5 bg-ink-950/75 backdrop-blur-md">
+  <span
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-500/60 to-transparent opacity-70"
+  />
+  <div class="container-page flex h-16 items-center justify-between gap-6">
+    <a href="/" class="group flex items-center gap-2.5" aria-label="Blender 中文站 - 首页">
+      <span
+        class="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-brand-400 to-brand-700 text-white shadow-lg shadow-brand-900/40 transition-transform group-hover:scale-105"
+      >
+        <Icon name="box" size={20} />
+      </span>
+      <span class="leading-tight">
+        <span class="block text-[15px] font-bold tracking-tight text-white">Blender 中文站</span>
+        <span class="block text-[10.5px] font-medium uppercase tracking-[0.18em] text-zinc-500">中文文档门户</span>
+      </span>
+    </a>
+
+    <!-- 桌面导航 -->
+    <nav class="hidden items-center gap-1 lg:flex" aria-label="主导航">
+      {
+        links.map((l) => (
+          <a
+            href={l.href}
+            class:list={[
+              'rounded-full px-3.5 py-1.5 text-sm font-medium transition-all duration-200',
+              isActive(l.href)
+                ? 'bg-brand-500/10 text-brand-300 ring-1 ring-inset ring-brand-500/25'
+                : 'text-zinc-400 hover:bg-white/5 hover:text-zinc-100',
+            ]}
+          >
+            {l.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="flex items-center gap-2.5">
+      <a
+        href="/search/"
+        class="group inline-flex items-center gap-2 rounded-full border border-white/10 px-3.5 py-1.5 text-sm font-medium text-zinc-300 transition-colors hover:border-brand-500/50 hover:text-brand-300"
+        aria-label="搜索全部文档"
+      >
+        <Icon name="search" size={16} class="text-zinc-500 transition-colors group-hover:text-brand-400" />
+        <span class="hidden md:inline">搜索</span>
+        <kbd class="keycap hidden md:inline-flex" aria-hidden="true">/</kbd>
+      </a>
+      <a
+        href="https://docs.blender.org/manual/zh-hans/latest/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="group hidden items-center gap-1.5 rounded-full border border-brand-500/35 bg-brand-500/10 px-4 py-1.5 text-sm font-semibold text-brand-300 transition-colors hover:border-brand-400/60 hover:bg-brand-500/20 sm:inline-flex"
+      >
+        官方中文手册
+        <Icon name="arrowUpRight" size={15} class="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+      </a>
+
+      <!-- 移动端菜单按钮 -->
+      <button
+        id="nav-toggle"
+        type="button"
+        class="grid h-10 w-10 place-items-center rounded-lg text-zinc-300 hover:bg-white/5 lg:hidden"
+        aria-label="打开导航菜单"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <Icon name="menu" size={22} />
+      </button>
+    </div>
+  </div>
+
+  <!-- 移动端菜单 -->
+  <div id="mobile-menu" class="hidden border-t border-white/5 bg-ink-950/95 backdrop-blur-lg lg:hidden">
+    <nav class="container-page flex flex-col gap-1 py-4" aria-label="移动端导航">
+      <a
+        href="/search/"
+        class="mb-1 flex items-center gap-2.5 rounded-lg bg-white/[0.04] px-3 py-2.5 text-[15px] font-medium text-zinc-200"
+      >
+        <Icon name="search" size={17} class="text-zinc-500" />
+        搜索全部文档
+        <span class="keycap ml-auto">/</span>
+      </a>
+      {
+        links.map((l) => (
+          <a
+            href={l.href}
+            class:list={[
+              'rounded-lg px-3 py-2.5 text-[15px] font-medium',
+              isActive(l.href) ? 'bg-white/8 text-brand-300' : 'text-zinc-300 hover:bg-white/5',
+            ]}
+          >
+            {l.label}
+          </a>
+        ))
+      }
+      <a
+        href="https://docs.blender.org/manual/zh-hans/latest/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mt-1 inline-flex items-center justify-center gap-1.5 rounded-lg border border-brand-500/35 bg-brand-500/10 px-3 py-2.5 text-[15px] font-semibold text-brand-300"
+      >
+        官方中文手册
+        <Icon name="arrowUpRight" size={16} />
+      </a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // 按 / 快速跳转到搜索（在输入框中时不触发）
+  document.addEventListener('keydown', (e) => {
+    const t = e.target as HTMLElement | null;
+    if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (window.location.pathname.startsWith('/search')) return; // 搜索页内 '/' 由搜索页处理（聚焦输入框）
+    const tag = t?.tagName ?? '';
+    const editable = t?.isContentEditable;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || editable) return;
+    e.preventDefault();
+    window.location.assign('/search/');
+  });
+</script>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const menu = document.getElementById('mobile-menu');
+  toggle?.addEventListener('click', () => {
+    const open = menu?.classList.toggle('hidden') === false;
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+</script>

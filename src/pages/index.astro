@@ -1,0 +1,421 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { getAllDocs } from '../lib/docs';
+
+const allDocs = await getAllDocs();
+const manualDocs = allDocs.filter((d) => d.group === 'manual');
+const devDocs = allDocs.filter((d) => d.group === 'dev');
+
+const pipeline = [
+  {
+    icon: 'box',
+    title: '建模',
+    desc: '网格、曲线、曲面与修改器；支持多边形、程序化建模再到雕刻细节。',
+    chip: 'Mesh · Curves · Modifiers',
+    href: '/docs/modeling',
+  },
+  {
+    icon: 'sparkles',
+    title: '雕刻 · 绘制 · 蜡笔',
+    desc: '像捏粘土一样雕刻模型；顶点、纹理与权重绘制；Grease Pencil 2D 动画。',
+    chip: 'Sculpt · Paint · Grease Pencil',
+    href: '/docs/sculpt-paint',
+  },
+  {
+    icon: 'activity',
+    title: '动画 · 绑定 · 物理',
+    desc: '关键帧、骨骼绑定、形态键，再到布料、流体、刚体等一站式模拟。',
+    chip: 'Rigging · Simulation',
+    href: '/docs/animation',
+  },
+  {
+    icon: 'sun',
+    title: '渲染',
+    desc: 'EEVEE 实时渲染与 Cycles 路径追踪；宽色域 HDR 色彩管线，支持 GPU/CPU。',
+    chip: 'EEVEE · Cycles',
+    href: '/docs/rendering',
+  },
+  {
+    icon: 'film',
+    title: '合成 · 跟踪 · 剪辑',
+    desc: '节点式合成、摄像机运动跟踪与遮罩、内置非线性视频剪辑（VSE）。',
+    chip: 'Compositing · VSE',
+    href: '/docs/tracking-video',
+  },
+  {
+    icon: 'blocks',
+    title: '扩展与脚本',
+    desc: '扩展仓库安装即用，或用 Python 编写自定义工具，深度融入工作流。',
+    chip: 'Extensions · Python',
+    href: '/docs/extensions',
+  },
+];
+
+const resources = [
+  {
+    icon: 'book',
+    title: '官方中文手册',
+    desc: 'Blender 5.2 LTS 参考手册 · 简体中文完整翻译',
+    href: 'https://docs.blender.org/manual/zh-hans/latest/',
+  },
+  {
+    icon: 'terminal',
+    title: '开发者文档',
+    desc: '构建指南、编码规范、模块系统与发布说明',
+    href: 'https://developer.blender.org/docs/',
+  },
+  {
+    icon: 'gitBranch',
+    title: '代码仓库与缺陷追踪',
+    desc: '基于 Forgejo 的源码托管与问题跟踪',
+    href: 'https://projects.blender.org',
+  },
+  {
+    icon: 'chat',
+    title: '开发者论坛 DevTalk',
+    desc: '与开发者面对面讨论功能与开发方向',
+    href: 'https://devtalk.blender.org',
+  },
+  {
+    icon: 'globe',
+    title: '官方网站',
+    desc: '新闻、社区、培训与项目背景',
+    href: 'https://www.blender.org',
+  },
+  {
+    icon: 'users',
+    title: '用户社区',
+    desc: '全球用户社区与学习资源入口',
+    href: 'https://www.blender.org/community/',
+  },
+];
+
+const features = [
+  { title: '从 1995 年走来', desc: '由 Ton Roosendaal 发起，历经近三十年持续开发' },
+  { title: '2002 年众筹开源', desc: '10 万欧元众筹使其以 GPL 协议向全世界开放' },
+  { title: '三大桌面平台', desc: 'Windows、macOS、Linux 原生支持' },
+  { title: '真正的全流程', desc: '建模 → 动画 → 渲染 → 剪辑，一条龙完成' },
+];
+---
+
+<BaseLayout
+  title="首页"
+  description="Blender 中文站：Blender 是免费且开源的 3D 创作套件，支持完整的 3D 制作流程——建模、绑定、动画、模拟、渲染、合成、运动跟踪以及视频剪辑。本站提供中文手册与开发者文档导航。"
+>
+  <!-- ================= Hero ================= -->
+  <section class="relative overflow-hidden">
+    <div class="container-page grid items-center gap-14 pb-16 pt-14 lg:grid-cols-[1.05fr_0.95fr] lg:pb-24 lg:pt-20">
+      <div class="animate-fade-up">
+        <p class="kicker text-brand-500">
+          <span class="h-1.5 w-1.5 rounded-full bg-brand-500" />
+          自由开源 · 全流程 3D 创作套件
+        </p>
+        <h1 class="mt-5 text-[2.6rem] font-bold leading-[1.08] tracking-tight text-white sm:text-6xl">
+          从建模到成片，
+          <span class="text-brand-300">一个软件全搞定</span>
+        </h1>
+        <p class="mt-6 max-w-xl text-lg leading-8 text-zinc-400">
+          Blender 是免费且开源的 3D 创作套件，支持完整的 3D 制作流程——建模、绑定、动画、模拟、渲染、合成、运动跟踪以及视频剪辑。
+        </p>
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <a
+            href="/docs/getting-started"
+            class="btn-primary group px-6 py-3 text-[15px]"
+          >
+            开始使用 Blender
+            <Icon name="arrowRight" size={17} class="transition-transform duration-300 group-hover:translate-x-1" />
+          </a>
+          <a href="/docs/build" class="btn-secondary px-6 py-3 text-[15px]">
+            <Icon name="terminal" size={17} />
+            从源码构建
+          </a>
+        </div>
+        <dl class="mt-10 grid max-w-2xl grid-cols-2 gap-y-6 sm:grid-cols-4 sm:gap-y-7">
+          {features.map((f) => (
+            <div class="sm:border-l sm:border-white/8 sm:pl-5 first:border-l-0 first:pl-0">
+              <dt class="flex items-center gap-1.5 text-[13px] font-bold text-zinc-100">
+                <span class="h-1 w-1 rounded-full bg-brand-500" aria-hidden="true" />
+                {f.title}
+              </dt>
+              <dd class="mt-1.5 text-[11.5px] leading-5 text-zinc-500">{f.desc}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+
+      <!-- 装饰区：玻璃立方体 -->
+      <div class="relative hidden select-none lg:block" aria-hidden="true">
+        <div class="relative mx-auto h-[380px] w-[380px]">
+          <div class="cube-halo absolute inset-0" />
+          <div class="animate-float-slow absolute inset-0">
+            <div class="absolute left-1/2 top-1/2" style="perspective: 900px">
+              <div class="cube3d relative h-28 w-28 -translate-x-1/2 -translate-y-1/2">
+                <span class="f f-front bg-gradient-to-br from-brand-300/40 to-brand-500/20" />
+                <span class="f f-back bg-brand-800/25" />
+                <span class="f f-right bg-gradient-to-tr from-brand-500/45 to-brand-700/25" />
+                <span class="f f-left bg-brand-700/30" />
+                <span class="f f-top bg-gradient-to-bl from-brand-200/45 to-brand-400/25" />
+                <span class="f f-bottom bg-brand-900/40" />
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-chip absolute -left-2 top-10 rounded-2xl px-4 py-3">
+            <p class="text-xs font-semibold text-white">Cycles</p>
+            <p class="mt-0.5 text-[11px] text-zinc-500">路径追踪 · GPU / CPU</p>
+          </div>
+          <div class="glass-chip absolute -right-2 top-24 rounded-2xl px-4 py-3">
+            <p class="text-xs font-semibold text-white">EEVEE</p>
+            <p class="mt-0.5 text-[11px] text-zinc-500">实时渲染引擎</p>
+          </div>
+          <div class="glass-chip absolute -right-4 bottom-16 rounded-2xl px-4 py-3">
+            <p class="text-xs font-semibold text-white">几何节点</p>
+            <p class="mt-0.5 text-[11px] text-zinc-500">程序化建模</p>
+          </div>
+          <div class="glass-chip absolute -left-4 bottom-6 rounded-2xl px-4 py-3">
+            <p class="text-xs font-semibold text-white">Grease Pencil</p>
+            <p class="mt-0.5 text-[11px] text-zinc-500">3D 空间 2D 动画</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 版本条 ================= -->
+  <section class="border-y border-white/5 bg-white/[0.02]">
+    <div class="container-page flex flex-wrap items-center justify-between gap-x-6 gap-y-2 py-3.5">
+      <p class="flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px] text-zinc-400">
+        <span class="inline-flex items-center gap-1.5 rounded-full border border-brand-500/30 bg-brand-500/10 px-2.5 py-0.5 text-[12px] font-bold text-brand-300">
+          <span class="relative flex h-1.5 w-1.5">
+            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-400 opacity-60" />
+            <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand-400" />
+          </span>
+          Blender 5.2 LTS
+        </span>
+        2026 年 7 月发布 · 支持至 2028 年 7 月 · 最新补丁 5.2.1
+      </p>
+      <a
+        href="https://www.blender.org/download/releases/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-1.5 text-[13px] font-semibold text-zinc-300 transition-colors hover:text-brand-300"
+      >
+        全部发布说明
+        <Icon name="arrowUpRight" size={14} class="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+      </a>
+    </div>
+  </section>
+
+  <!-- ================= 工作流 ================= -->
+  <section class="container-page py-20 lg:py-24">
+    <div class="reveal flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <p class="kicker text-brand-500">一站式工作流</p>
+        <h2 class="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl">整套三维生产流程，覆盖每一个环节</h2>
+      </div>
+      <a href="/docs/" class="inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-brand-400 hover:text-brand-300">
+        查看全部中文文档
+        <Icon name="arrowRight" size={16} class="transition-transform duration-300 group-hover:translate-x-0.5" />
+      </a>
+    </div>
+
+    <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {pipeline.map((p, i) => (
+        <a
+          href={p.href}
+          class="reveal group relative overflow-hidden rounded-2xl border border-white/8 bg-white/[0.03] p-6 shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-brand-500/45 hover:bg-brand-500/[0.05] hover:shadow-lift"
+          style={`--i:${i}`}
+        >
+          <div class="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-brand-500/0 blur-2xl transition-colors duration-300 group-hover:bg-brand-500/15" />
+          <span class="icon-tile h-12 w-12 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:scale-[1.03]">
+            <Icon name={p.icon} size={24} />
+          </span>
+          <h3 class="mt-5 text-lg font-bold text-zinc-100 transition-colors group-hover:text-brand-300">{p.title}</h3>
+          <p class="mt-2 text-sm leading-6 text-zinc-500">{p.desc}</p>
+          <p class="mt-4 font-mono text-[11px] font-medium uppercase tracking-wider text-zinc-500 transition-colors group-hover:text-brand-400/80">
+            {p.chip}
+          </p>
+          <span class="mt-5 inline-flex items-center gap-1.5 text-[13px] font-semibold text-brand-500/80 transition-colors group-hover:text-brand-300">
+            了解详情
+            <Icon name="arrowRight" size={15} class="transition-transform duration-300 group-hover:translate-x-1" />
+          </span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- ================= 开源与社区 ================= -->
+  <section class="border-y border-white/5 bg-white/[0.02]">
+    <div class="container-page grid gap-12 py-20 lg:grid-cols-[1fr_1.2fr] lg:py-24">
+      <div>
+        <p class="kicker text-brand-500">为什么免费？</p>
+        <h2 class="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+          它不是“免费试用版”，而是<span class="text-brand-300">真正的自由软件</span>
+        </h2>
+        <p class="mt-5 leading-8 text-zinc-400">
+          Blender 整体基于 GNU GPLv3 发布，由 Blender 基金会协调、全球开发者与公司共同资助。2002 年，社区众筹
+          10 万欧元将其开源——如今它属于每一个使用者，代码与文档向所有人开放。
+        </p>
+        <div class="mt-7 space-y-3">
+          <a href="/docs/license" class="group flex items-center gap-3 text-sm font-medium text-zinc-300 hover:text-brand-300">
+            <span class="grid h-8 w-8 place-items-center rounded-lg border border-white/10 text-brand-400">
+              <Icon name="shield" size={16} />
+            </span>
+            许可证：GPLv3 意味着什么？
+            <Icon name="arrowRight" size={15} class="transition-transform group-hover:translate-x-0.5" />
+          </a>
+          <a href="/docs/contribute" class="group flex items-center gap-3 text-sm font-medium text-zinc-300 hover:text-brand-300">
+            <span class="grid h-8 w-8 place-items-center rounded-lg border border-white/10 text-brand-400">
+              <Icon name="users" size={16} />
+            </span>
+            你也可以参与——报告缺陷、贡献代码与文档
+            <Icon name="arrowRight" size={15} class="transition-transform group-hover:translate-x-0.5" />
+          </a>
+          <a href="/docs/build" class="group flex items-center gap-3 text-sm font-medium text-zinc-300 hover:text-brand-300">
+            <span class="grid h-8 w-8 place-items-center rounded-lg border border-white/10 text-brand-400">
+              <Icon name="terminal" size={16} />
+            </span>
+            从源码构建属于自己的 Blender
+            <Icon name="arrowRight" size={15} class="transition-transform group-hover:translate-x-0.5" />
+          </a>
+        </div>
+      </div>
+
+      <div class="grid gap-4 sm:grid-cols-2">
+        {resources.map((r, i) => (
+          <a
+            href={r.href}
+            target={r.href.startsWith('http') ? '_blank' : undefined}
+            rel={r.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+            class="reveal group rounded-2xl border border-white/8 bg-ink-950/50 p-5 shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-brand-500/45 hover:shadow-lift"
+            style={`--i:${i}`}
+          >
+            <div class="flex items-start justify-between">
+              <span class="grid h-10 w-10 place-items-center rounded-xl border border-white/10 bg-white/[0.03] text-brand-400 transition-all duration-300 group-hover:scale-105 group-hover:border-brand-500/40">
+                <Icon name={r.icon} size={19} />
+              </span>
+              <Icon
+                name="arrowUpRight"
+                size={16}
+                class="text-zinc-700 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand-400"
+              />
+            </div>
+            <h3 class="mt-4 font-semibold text-zinc-100 transition-colors group-hover:text-brand-300">{r.title}</h3>
+            <p class="mt-1 text-[12.5px] leading-5 text-zinc-500">{r.desc}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 文档中心预览 ================= -->
+  <section class="container-page py-20 lg:py-24">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <p class="kicker text-brand-500">本站文档</p>
+        <h2 class="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+          精选 {manualDocs.length + devDocs.length} 篇中文指南
+        </h2>
+        <p class="mt-3 max-w-2xl text-zinc-500">由 README 与官方文档整理而来，每篇都附官方原文入口。</p>
+      </div>
+      <a href="/docs/" class="inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-brand-400 hover:text-brand-300">
+        打开文档中心
+        <Icon name="arrowRight" size={16} />
+      </a>
+    </div>
+
+    <div class="mt-9 grid gap-8 md:grid-cols-2">
+      <div>
+        <h3 class="flex items-center gap-2 text-[13px] font-bold uppercase tracking-[0.16em] text-zinc-500">
+          使用手册
+          <span class="rounded-full border border-white/10 px-2 py-0.5 font-mono text-[10.5px] normal-case tracking-normal text-zinc-500">
+            {manualDocs.length}
+          </span>
+        </h3>
+        <ul class="mt-4 divide-y divide-white/5 overflow-hidden rounded-2xl border border-white/8 bg-white/[0.02]">
+          {manualDocs.map((d) => (
+            <li>
+              <a href={d.href} class="group flex items-center gap-3.5 px-5 py-3.5 transition-colors hover:bg-brand-500/[0.06]">
+                <span class="font-mono text-[11px] font-semibold text-zinc-600 group-hover:text-brand-500">#{String(d.order).padStart(2, '0')}</span>
+                <Icon name={d.icon} size={17} class="text-zinc-500 transition-colors group-hover:text-brand-400" />
+                <span class="flex-1 text-[14.5px] font-medium text-zinc-200 transition-colors group-hover:text-brand-300">{d.title}</span>
+                <span class="hidden max-w-[40%] truncate text-xs text-zinc-600 sm:block">{d.tagline}</span>
+                <Icon name="arrowRight" size={15} class="text-zinc-700 transition-all group-hover:translate-x-0.5 group-hover:text-brand-400" />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="flex items-center gap-2 text-[13px] font-bold uppercase tracking-[0.16em] text-zinc-500">
+          开发者文档
+          <span class="rounded-full border border-white/10 px-2 py-0.5 font-mono text-[10.5px] normal-case tracking-normal text-zinc-500">
+            {devDocs.length}
+          </span>
+        </h3>
+        <ul class="mt-4 divide-y divide-white/5 overflow-hidden rounded-2xl border border-white/8 bg-white/[0.02]">
+          {devDocs.map((d) => (
+            <li>
+              <a href={d.href} class="group flex items-center gap-3.5 px-5 py-3.5 transition-colors hover:bg-brand-500/[0.06]">
+                <span class="font-mono text-[11px] font-semibold text-zinc-600 group-hover:text-brand-500">#{String(d.order).padStart(2, '0')}</span>
+                <Icon name={d.icon} size={17} class="text-zinc-500 transition-colors group-hover:text-brand-400" />
+                <span class="flex-1 text-[14.5px] font-medium text-zinc-200 transition-colors group-hover:text-brand-300">{d.title}</span>
+                <span class="hidden max-w-[40%] truncate text-xs text-zinc-600 sm:block">{d.tagline}</span>
+                <Icon name="arrowRight" size={15} class="text-zinc-700 transition-all group-hover:translate-x-0.5 group-hover:text-brand-400" />
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <div class="relative mt-8 overflow-hidden rounded-2xl border border-brand-500/25 bg-gradient-to-br from-brand-500/[0.1] via-transparent to-transparent p-6">
+          <p class="text-sm font-semibold text-white">想直接看官方完整内容？</p>
+          <p class="mt-1.5 text-[13px] leading-6 text-zinc-500">
+            官方参考手册提供简体中文翻译（zh-hans），随 Blender 5.2 LTS 持续更新，可在线阅读或下载 EPUB / HTML 离线版本。
+          </p>
+          <a
+            href="https://docs.blender.org/manual/zh-hans/latest/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-primary mt-4 px-4 py-2 text-[13px]"
+          >
+            前往官方中文手册
+            <Icon name="arrowUpRight" size={15} />
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 下载 CTA ================= -->
+  <section class="container-page pb-8">
+    <div class="reveal relative overflow-hidden rounded-3xl border border-brand-500/25 bg-gradient-to-r from-brand-600/[0.14] via-ink-900 to-ink-900 px-8 py-12 shadow-card sm:px-12 lg:py-16">
+      <div class="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-brand-500/20 blur-3xl" />
+      <div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-400/60 to-transparent" />
+      <div class="relative max-w-2xl">
+        <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+          现在就开始你的 <span class="text-brand-300">3D 之旅</span>
+        </h2>
+        <p class="mt-4 leading-8 text-zinc-400">
+          下载最新的 Blender 5.2 LTS（约 350 MB），支持 Windows、macOS 与 Linux。免费、开源、没有功能限制——不满意随时删除，或者干脆从源码自己编译一版。
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a
+            href="https://www.blender.org/download/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-primary group px-6 py-3 text-[15px]"
+          >
+            <Icon name="download" size={18} class="transition-transform duration-300 group-hover:-translate-y-0.5" />
+            下载 Blender 5.2.1 LTS
+          </a>
+          <a href="/docs/getting-started" class="btn-secondary px-6 py-3 text-[15px]">
+            <Icon name="book" size={17} />
+            先读快速上手
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

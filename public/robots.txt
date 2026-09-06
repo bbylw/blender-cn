@@ -1,0 +1,7 @@
+# Blender 中文站
+# 生产环境域名：https://blender.ndjp.net
+
+User-agent: *
+Allow: /
+
+Sitemap: https://blender.ndjp.net/sitemap-index.xml

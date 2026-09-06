@@ -1,0 +1,126 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import { getAllDocs, GROUP_LABELS, GROUP_TAGLINES } from '../../lib/docs';
+
+const docs = await getAllDocs();
+const groups = ['manual', 'dev'] as const;
+const grouped = {
+  manual: docs.filter((d) => d.group === 'manual'),
+  dev: docs.filter((d) => d.group === 'dev'),
+};
+---
+
+<BaseLayout
+  title="文档中心"
+  description="Blender 中文站的全部文档：使用手册（关于、快速上手、编辑器、建模、动画、渲染等）与开发者文档（从源码构建、参与贡献、许可证），支持站内搜索。"
+>
+  <section class="container-page pt-14 lg:pt-20">
+    <div class="flex flex-wrap items-start justify-between gap-6">
+      <div class="min-w-0">
+        <p class="kicker text-brand-500">文档中心 · Documentation</p>
+        <h1 class="mt-4 max-w-3xl text-4xl font-bold tracking-tight text-white sm:text-5xl">手册与开发者指南</h1>
+        <p class="mt-5 max-w-2xl text-lg leading-8 text-zinc-400">
+          本站将官方文档要点整理为
+          <span class="font-semibold text-brand-300">{docs.length} 篇</span>中文短文，按
+          <span class="text-zinc-200">“使用手册 → 开发者文档”</span>线性阅读即可循序渐进；每页附官方原文链接，细节请以官方文档为准。
+        </p>
+      </div>
+      <a
+        href="/search/"
+        class="group inline-flex shrink-0 items-center gap-2 rounded-full border border-white/12 bg-white/[0.03] px-5 py-2.5 text-sm font-semibold text-zinc-200 transition-colors hover:border-brand-500/50 hover:text-brand-300"
+      >
+        <Icon name="search" size={16} />
+        搜索全部文档
+        <span class="rounded-md border border-white/10 px-1.5 py-0.5 font-mono text-[11px] text-zinc-500">/</span>
+      </a>
+    </div>
+    <div class="mt-6 flex flex-wrap items-center gap-3">
+      <a
+        href="https://docs.blender.org/manual/zh-hans/latest/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 rounded-full bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-400"
+      >
+        官方中文手册（zh-hans）
+        <Icon name="arrowUpRight" size={16} />
+      </a>
+      <a
+        href="https://developer.blender.org/docs/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 rounded-full border border-white/12 px-5 py-2.5 text-sm font-semibold text-zinc-200 transition-colors hover:border-brand-500/50 hover:text-brand-300"
+      >
+        官方开发者文档
+        <Icon name="arrowUpRight" size={16} />
+      </a>
+    </div>
+  </section>
+
+  <section class="container-page mt-14 space-y-14">
+    {groups.map((g) => (
+      <div>
+        <div class="flex items-end justify-between gap-4">
+          <div>
+            <h2 class="flex items-center gap-2.5 text-xl font-bold text-white">
+              {GROUP_LABELS[g]}
+              <span class="rounded-full border border-brand-500/30 bg-brand-500/10 px-2.5 py-0.5 font-mono text-[11px] font-semibold normal-case tracking-normal text-brand-300">
+                {grouped[g].length}
+              </span>
+            </h2>
+            <p class="mt-1 text-sm text-zinc-500">{GROUP_TAGLINES[g]}，建议按编号顺序阅读。</p>
+          </div>
+        </div>
+        <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {grouped[g].map((d, i) => (
+            <a
+              href={d.href}
+              class="reveal group flex h-full flex-col rounded-2xl border border-white/8 bg-white/[0.03] p-5 shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-brand-500/45 hover:bg-brand-500/[0.06] hover:shadow-lift"
+              style={`--i:${i}`}
+            >
+              <div class="flex items-start justify-between">
+                <span class="icon-tile h-11 w-11 transition-transform duration-300 group-hover:-translate-y-0.5">
+                  <Icon name={d.icon} size={22} />
+                </span>
+                <span class="font-mono text-xs font-semibold text-zinc-600 transition-colors group-hover:text-brand-500">
+                  #{String(d.order).padStart(2, '0')}
+                </span>
+              </div>
+              <h3 class="mt-4 font-bold text-zinc-100 transition-colors group-hover:text-brand-300">{d.title}</h3>
+              <p class="mt-1.5 text-[13.5px] leading-6 text-zinc-500">{d.tagline}</p>
+              <span class="mt-auto flex items-center gap-1.5 pt-4 text-[13px] font-semibold text-brand-500/80 transition-colors group-hover:text-brand-300">
+                阅读本章
+                <Icon name="arrowRight" size={15} class="transition-transform duration-300 group-hover:translate-x-1" />
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    ))}
+  </section>
+
+  <!-- 阅读建议 -->
+  <section class="container-page mt-16">
+    <div class="rounded-3xl border border-brand-500/20 bg-gradient-to-r from-brand-500/[0.08] via-white/[0.02] to-transparent p-7 sm:p-9">
+      <div class="flex flex-col gap-6 sm:flex-row sm:items-center">
+        <span
+          class="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-brand-500/15 text-brand-400 ring-1 ring-inset ring-brand-500/25"
+        >
+          <Icon name="book" size={28} />
+        </span>
+        <div class="flex-1">
+          <h2 class="text-lg font-bold text-white">推荐的阅读路径</h2>
+          <p class="mt-1.5 text-sm leading-7 text-zinc-400">
+            零基础：从 <a href="/docs/about" class="font-medium text-brand-300 hover:underline">关于 Blender</a> 与
+            <a href="/docs/getting-started" class="font-medium text-brand-300 hover:underline"> 快速上手</a> 开始 →
+            挑感兴趣的章节（建模 / 动画 / 渲染）边做边学 → 需要脚本或插件时再看
+            <a href="/docs/extensions" class="font-medium text-brand-300 hover:underline">扩展与脚本</a>；生词随时查
+            <a href="/docs/glossary" class="font-medium text-brand-300 hover:underline">术语表</a>。想参与开发或自行编译，直接进入
+            <a href="/docs/build" class="font-medium text-brand-300 hover:underline">从源码构建</a>。
+          </p>
+          <p class="mt-2 text-xs text-zinc-600">官方中文手册已覆盖全部章节的完整翻译，本站各页底部都有指向对应官方章节的入口。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

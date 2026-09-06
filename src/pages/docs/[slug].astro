@@ -1,0 +1,22 @@
+---
+import DocLayout from '../../layouts/DocLayout.astro';
+import { getCollection, render } from 'astro:content';
+import { getAllDocs, type DocItem } from '../../lib/docs';
+
+export async function getStaticPaths() {
+  const docs = await getAllDocs();
+  return docs.map((doc) => ({ params: { slug: doc.slug }, props: { doc, docs } }));
+}
+
+const { doc, docs } = Astro.props as { doc: DocItem; docs: DocItem[] };
+
+// 真正的内容条目（含 body 与 render()）通过集合按 id 取回
+const entries = await getCollection('docs');
+const entry = entries.find((e) => e.id === doc.slug);
+if (!entry) throw new Error(`内容集合中找不到 ${doc.slug}`);
+const { Content } = await render(entry);
+---
+
+<DocLayout doc={doc} docs={docs}>
+  <Content />
+</DocLayout>

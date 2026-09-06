@@ -1,0 +1,118 @@
+---
+/**
+ * 轻量内联图标集（24×24 描边风格，随文字颜色变色）。
+ * 用法：<Icon name="cube" size={18} class="text-brand-400" />
+ */
+interface Props {
+  name: string;
+  size?: number;
+  class?: string;
+}
+const { name, size = 20, class: className = '' } = Astro.props;
+
+const STROKE = {
+  fill: 'none',
+  stroke: 'currentColor',
+  'stroke-width': 1.9,
+  'stroke-linecap': 'round',
+  'stroke-linejoin': 'round',
+} as const;
+
+// name -> 内部图形
+const ICONS: Record<string, string> = {
+  info: /* 关于 */ `
+    <circle cx="12" cy="12" r="9"/>
+    <path d="M12 8.2h.01"/><path d="M11.2 12h.8v4.2h.8"/>
+  `,
+  compass: /* 快速上手 */ `
+    <circle cx="12" cy="12" r="9"/>
+    <path d="m15.4 8.6-2.8 4.8-4.8 2.8 2.8-4.8z"/>
+  `,
+  layout: /* 界面与编辑器 */ `
+    <rect x="3.2" y="3.2" width="17.6" height="17.6" rx="2.2"/>
+    <path d="M3.2 9.4h17.6M9.4 3.2v17.6"/>
+  `,
+  box: /* 建模 */ `
+    <path d="M21 8.2a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8.2v7.6a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.73Z"/>
+    <path d="M3.3 7.3 12 12.3l8.7-5M12 22.1V12.3"/>
+  `,
+  sparkles: /* 雕刻与绘制 */ `
+    <path d="M9.94 15.5a2 2 0 0 0-1.44-1.44l-6.14-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.14a.5.5 0 0 1 .96 0l1.58 6.14a2 2 0 0 0 1.44 1.44l6.14 1.58a.5.5 0 0 1 0 .96l-6.14 1.58a2 2 0 0 0-1.44 1.44l-1.58 6.14a.5.5 0 0 1-.96 0Z"/>
+    <path d="M20 3v4M22 5h-4M4.5 16.5v3M6 18h-3"/>
+  `,
+  activity: /* 动画与物理 */ `
+    <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+  `,
+  sun: /* 渲染 */ `
+    <circle cx="12" cy="12" r="4.4"/>
+    <path d="M12 2.8v2M12 19.2v2M2.8 12h2M19.2 12h2M5.5 5.5l1.4 1.4M17.1 17.1l1.4 1.4M18.5 5.5l-1.4 1.4M6.9 17.1l-1.4 1.4"/>
+  `,
+  film: /* 视频剪辑与跟踪 */ `
+    <rect x="2.6" y="4.2" width="18.8" height="15.6" rx="2.2"/>
+    <path d="M7.2 4.2v15.6M16.8 4.2v15.6M2.6 9.6h4.6M2.6 14.4h4.6M16.8 9.6h4.6M16.8 14.4h4.6"/>
+  `,
+  folder: /* 资产与文件 */ `
+    <path d="M3.5 7.2a2 2 0 0 1 2-2h3.9c.53 0 1.04.21 1.41.59l.79.81h7.9a2 2 0 0 1 2 2v8.8a2 2 0 0 1-2 2h-13.8a2 2 0 0 1-2-2Z"/>
+  `,
+  blocks: /* 扩展与脚本 */ `
+    <rect x="3.2" y="3.2" width="7" height="7" rx="1.6"/><rect x="13.8" y="3.2" width="7" height="7" rx="1.6"/>
+    <rect x="3.2" y="13.8" width="7" height="7" rx="1.6"/><rect x="13.8" y="13.8" width="7" height="7" rx="1.6"/>
+  `,
+  terminal: /* 从源码构建 */ `
+    <path d="m4.8 17.2 5.4-5.2-5.4-5.2"/><path d="M12.8 19h6.4"/>
+  `,
+  users: /* 参与贡献 */ `
+    <path d="M16.4 21v-1.8a4.2 4.2 0 0 0-4.2-4.2H6.8a4.2 4.2 0 0 0-4.2 4.2V21"/>
+    <circle cx="9.5" cy="7.4" r="4"/>
+    <path d="M21.4 21v-1.8a4.2 4.2 0 0 0-3.2-4.06"/><path d="M15.9 3.6a4 4 0 0 1 0 7.7"/>
+  `,
+  shield: /* 许可证 */ `
+    <path d="M20 13.2c0 4.9-3.4 7.3-7.6 8.7a1.1 1.1 0 0 1-.8 0C7.4 20.5 4 18.1 4 13.2V6.3a1 1 0 0 1 .8-1l7-2.3a1 1 0 0 1 .5 0l7 2.3a1 1 0 0 1 .7 1Z"/>
+    <path d="m9 12.3 2.1 2.1 4-4.2"/>
+  `,
+  book: `
+    <path d="M12 6.5C10.4 5 8.2 4.2 5.5 4.2c-.8 0-1.5.1-2 .3v14.2c.5-.2 1.2-.3 2-.3 2.7 0 4.9.8 6.5 2.3 1.6-1.5 3.8-2.3 6.5-2.3.8 0 1.5.1 2 .3V4.5c-.5-.2-1.2-.3-2-.3-2.7 0-4.9.8-6.5 2.3Z"/>
+    <path d="M12 6.5V21"/>
+  `,
+  download: `
+    <path d="M12 3.5v11M8 10.5l4 4 4-4"/><path d="M4.5 17.5v1.5a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5v-1.5"/>
+  `,
+  globe: `
+    <circle cx="12" cy="12" r="9"/>
+    <path d="M3 12h18M12 3c2.6 2.4 3.9 5.5 3.9 9S14.6 18.6 12 21c-2.6-2.4-3.9-5.5-3.9-9S9.4 5.4 12 3Z"/>
+  `,
+  arrowRight: `<path d="M4.5 12h15M13.5 6l6 6-6 6"/>`,
+  arrowLeft: `<path d="M19.5 12h-15M10.5 6l-6 6 6 6"/>`,
+  arrowUpRight: `<path d="M7 17 17 7M8.5 7H17v8.5"/>`,
+  menu: `<path d="M4 7h16M4 12h16M4 17h16"/>`,
+  x: `<path d="m6 6 12 12M18 6 6 18"/>`,
+  chevronDown: `<path d="m6 9.5 6 6 6-6"/>`,
+  play: `<path d="m9.5 7.5 7 4.5-7 4.5Z" fill="currentColor" stroke="none"/>`,
+  chat: `
+    <path d="M21 11.6a8.6 8.6 0 0 1-8.6 8.6c-1.4 0-2.7-.3-3.8-.9L3 21l1.6-5.2a8.4 8.4 0 0 1-.9-3.8A8.6 8.6 0 0 1 12.4 3 8.6 8.6 0 0 1 21 11.6Z"/>
+  `,
+  gitBranch: `
+    <path d="M6.5 3v11"/><circle cx="6.5" cy="18.5" r="2.5"/><circle cx="18" cy="5.5" r="2.5"/>
+    <path d="M18 8c0 5.2-4 8-11.5 8"/>
+  `,
+  search: `
+    <circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/>
+  `,
+  arrowUp: `<path d="M12 19.5v-15M6 10.5l6-6 6 6"/>`,
+};
+---
+
+{name in ICONS ? (
+  <svg
+    viewBox="0 0 24 24"
+    width={size}
+    height={size}
+    aria-hidden="true"
+    focusable="false"
+    class:list={['shrink-0', className]}
+    set:html={ICONS[name]}
+    {...STROKE}
+  />
+) : (
+  <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" focusable="false" {...STROKE} set:html={ICONS.info} />
+)}

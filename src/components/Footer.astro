@@ -1,0 +1,107 @@
+---
+import Icon from './Icon.astro';
+
+const columns: { heading: string; items: { label: string; href: string; external?: boolean }[] }[] = [
+  {
+    heading: '本站栏目',
+    items: [
+      { label: '文档中心', href: '/docs/' },
+      { label: '站内搜索', href: '/search/' },
+      { label: '关于 Blender', href: '/docs/about' },
+      { label: '术语表', href: '/docs/glossary' },
+      { label: '从源码构建', href: '/docs/build' },
+      { label: '参与贡献', href: '/docs/contribute' },
+    ],
+  },
+  {
+    heading: '官方文档',
+    items: [
+      { label: '官方中文手册（zh-hans）', href: 'https://docs.blender.org/manual/zh-hans/latest/', external: true },
+      { label: '官方英文手册', href: 'https://docs.blender.org/manual/en/latest/', external: true },
+      { label: '开发者文档', href: 'https://developer.blender.org/docs/', external: true },
+      { label: '发布说明', href: 'https://developer.blender.org/docs/release_notes/', external: true },
+    ],
+  },
+  {
+    heading: '社区与代码',
+    items: [
+      { label: '用户社区', href: 'https://www.blender.org/community/', external: true },
+      { label: '代码仓库与缺陷追踪', href: 'https://projects.blender.org', external: true },
+      { label: '开发者论坛（DevTalk）', href: 'https://devtalk.blender.org', external: true },
+      { label: '许可证说明', href: 'https://www.blender.org/about/license/', external: true },
+    ],
+  },
+];
+---
+
+<footer class="relative mt-20 overflow-hidden border-t border-white/5 bg-ink-950/60">
+  <div
+    aria-hidden="true"
+    class="footer-wordmark pointer-events-none absolute -bottom-10 right-2 select-none text-[10rem] sm:text-[15rem]"
+  >
+    Blender
+  </div>
+  <div class="container-page relative py-12">
+    <div class="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+      <div>
+        <a href="/" class="flex items-center gap-2.5">
+          <span class="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-brand-400 to-brand-700 text-white">
+            <Icon name="box" size={20} />
+          </span>
+          <span class="text-[15px] font-bold tracking-tight text-white">Blender 中文站</span>
+        </a>
+        <p class="mt-4 max-w-xs text-sm leading-6 text-zinc-500">
+          面向 Blender 5.2 LTS 的社区中文资料站，基于 Blender 项目 README、官方参考手册与开发者文档整理，持续更新。
+        </p>
+        <div class="mt-5 flex flex-wrap gap-2">
+          <a
+            href="https://www.blender.org/download/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1.5 rounded-full bg-brand-500 px-3.5 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-brand-400"
+          >
+            <Icon name="download" size={15} />
+            下载 Blender
+          </a>
+        </div>
+      </div>
+
+      {
+        columns.map((col) => (
+          <nav aria-label={col.heading}>
+            <h3 class="text-xs font-semibold uppercase tracking-[0.16em] text-zinc-500">{col.heading}</h3>
+            <ul class="mt-4 space-y-2.5">
+              {col.items.map((item) => (
+                <li>
+                  <a
+                    href={item.href}
+                    target={item.external ? '_blank' : undefined}
+                    rel={item.external ? 'noopener noreferrer' : undefined}
+                    class="group inline-flex items-center gap-1 text-sm text-zinc-400 transition-colors hover:text-brand-300"
+                  >
+                    {item.label}
+                    {item.external && (
+                      <Icon name="arrowUpRight" size={13} class="text-zinc-600 transition-colors group-hover:text-brand-400" />
+                    )}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))
+      }
+    </div>
+
+    <div class="mt-12 border-t border-white/5 pt-6 text-xs leading-6 text-zinc-600">
+      <p>
+        本站为社区爱好者整理的非官方网站，与 Blender Foundation 无隶属关系。内容依据 GNU
+        自由文档精神编译整理，引用自官方文档与项目 README；转载本站内容请保留出处。
+      </p>
+      <p class="mt-2">
+        Blender® 及其徽标为 Blender Foundation 商标。本站以
+        <a href="/docs/license" class="underline decoration-white/20 underline-offset-2 hover:text-brand-300">GPLv3 / CC 兼容许可精神</a>
+        发布；由 Astro · Tailwind CSS · TypeScript · Bun 构建。
+      </p>
+    </div>
+  </div>
+</footer>

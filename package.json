@@ -1,0 +1,28 @@
+{
+  "name": "blender-zh",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Blender 中文文档站 —— 面向 Blender 5.2 LTS 的社区中文资料站（基于官方手册与开发者文档整理）",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "astro check",
+    "smoke": "bun scripts/smoke.mjs"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "@tailwindcss/typography": "^0.5.20",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.3.1",
+    "tailwindcss": "^4.3.3",
+    "zod": "^4.5.4"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "playwright-core": "^1.63.0",
+    "typescript": "^5.9.0"
+  }
+}
