@@ -77,12 +77,9 @@ const columns: { heading: string; items: { label: string; href: string; external
                     href={item.href}
                     target={item.external ? '_blank' : undefined}
                     rel={item.external ? 'noopener noreferrer' : undefined}
-                    class="group inline-flex items-center gap-1 text-sm text-zinc-400 transition-colors hover:text-brand-300"
+                    class="text-sm text-zinc-400 transition-colors hover:text-brand-300"
                   >
                     {item.label}
-                    {item.external && (
-                      <Icon name="arrowUpRight" size={13} class="text-zinc-600 transition-colors group-hover:text-brand-400" />
-                    )}
                   </a>
                 </li>
               ))}

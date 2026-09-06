@@ -40,7 +40,7 @@ Blender 不是“免费试用”或“社区版”。它整体基于 **GNU GPLv3
 - 2002 年，社区曾众筹约 **10 万欧元**，使当时已商业化的 Blender 以 GPL 协议开源，代码延续至今；
 - 代码、文档与翻译向所有人开放，任何个人或公司都可以自由使用、学习与修改。
 
-> 📎 相关内容：[许可证与开源含义 →](/docs/license)、[如何参与贡献 →](/docs/contribute)
+> 📎 相关内容：[许可证与开源含义](/docs/license)、[如何参与贡献](/docs/contribute)
 
 ## 版本与发布节奏
 
@@ -56,7 +56,7 @@ Blender 采用**短周期迭代 + LTS（长期支持）**模式：
 
 - **生产与教学**：使用 LTS 版本，稳定且有长期修复；
 - **尝鲜新功能**：使用最新功能版（非 LTS）；
-- **测试与开发**：可下载每日构建，或直接[从源码自行构建 →](/docs/build)。
+- **测试与开发**：可下载每日构建，或直接[从源码自行构建](/docs/build)。
 
 5.x 系列带来的一些重点变化（详见官方发布说明）：
 
@@ -73,6 +73,6 @@ Blender 提供 Windows、macOS、Linux 三大平台的安装包，体积小巧�
 
 ## 延伸阅读
 
-- [快速上手：安装与界面 →](/docs/getting-started)：从零开始的第一步
+- [快速上手：安装与界面](/docs/getting-started)：从零开始的第一步
 - [官方手册：关于 Blender](https://docs.blender.org/manual/zh-hans/latest/getting_started/about/index.html)：官方对 Blender 的完整介绍
 - [官网许可页](https://www.blender.org/about/license/)：关于许可证与版权的权威说明

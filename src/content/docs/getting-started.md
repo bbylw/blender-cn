@@ -30,7 +30,7 @@ Blender 的界面常让新手困惑，但它的逻辑非常统一——**一切�
 | 顶栏（Topbar） | 顶部菜单与文件、编辑、渲染等主菜单 |
 | 工作区（Workspace） | 针对任务预设的界面布局，如 Layout、Modeling、Sculpting、UV Editing、Animation、Compositing、Geometry Nodes |
 | 区域（Area） | 工作区由若干区域组成，每个区域显示一种“编辑器”；拖拽区域边角可拆分/合并 |
-| 编辑器（Editor） | 如 3D 视口、属性、大纲视图等，见 [用户界面与编辑器 →](/docs/editors) |
+| 编辑器（Editor） | 如 3D 视口、属性、大纲视图等，见 [用户界面与编辑器](/docs/editors) |
 | 区块（Panel） | 属性编辑器中竖排的折叠面板，点标题可展开/收起 |
 
 几个立刻能用的小技巧：
@@ -61,8 +61,8 @@ Blender 的界面常让新手困惑，但它的逻辑非常统一——**一切�
 
 1. **别背菜单**——先从默认工作区把立方体变形成你想要的东西；
 2. 完成一次“小闭环”：建模一个简单物体 → 上个材质 → 打灯光 → `F12` 渲染出图；
-3. 然后按需深入：[建模 →](/docs/modeling)、[雕刻 →](/docs/sculpt-paint)、[动画 →](/docs/animation)、[渲染 →](/docs/rendering)；
-4. 需要重复性操作时再学 [Python 脚本与扩展 →](/docs/extensions)。
+3. 然后按需深入：[建模](/docs/modeling)、[雕刻](/docs/sculpt-paint)、[动画](/docs/animation)、[渲染](/docs/rendering)；
+4. 需要重复性操作时再学 [Python 脚本与扩展](/docs/extensions)。
 
 > 💡 Blender 的学习曲线陡，但“做得越多、忘得越少”。每完成一个小作品，界面逻辑就会内化一步。
 

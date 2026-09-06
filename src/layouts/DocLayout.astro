@@ -108,17 +108,12 @@ const groupTitles: Record<GroupKey, string> = GROUP_LABELS;
             href={doc.source.url}
             target="_blank"
             rel="noopener noreferrer"
-            class="group mt-12 flex items-center justify-between gap-4 rounded-2xl border border-brand-500/25 bg-gradient-to-r from-brand-500/10 to-transparent px-5 py-4 transition-colors hover:border-brand-400/50"
+            class="mt-12 flex items-center gap-4 rounded-2xl border border-brand-500/25 bg-gradient-to-r from-brand-500/10 to-transparent px-5 py-4 transition-colors hover:border-brand-400/50"
           >
             <span>
               <span class="block text-sm font-semibold text-brand-300">官方参考</span>
               <span class="mt-0.5 block text-[13px] text-zinc-400">{doc.source.label}（可能仅提供英文原文）</span>
             </span>
-            <Icon
-              name="arrowUpRight"
-              size={20}
-              class="shrink-0 text-brand-400 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-            />
           </a>
         )}
 
@@ -129,10 +124,7 @@ const groupTitles: Record<GroupKey, string> = GROUP_LABELS;
               href={prev.href}
               class="group rounded-2xl border border-white/8 bg-white/[0.03] p-5 transition-colors hover:border-brand-500/40 hover:bg-brand-500/5"
             >
-              <span class="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-zinc-500">
-                <Icon name="arrowLeft" size={14} class="transition-transform group-hover:-translate-x-0.5" />
-                上一篇
-              </span>
+              <span class="text-xs font-semibold uppercase tracking-wider text-zinc-500">上一篇</span>
               <span class="mt-2 block font-semibold text-zinc-100 transition-colors group-hover:text-brand-300">{prev.title}</span>
               <span class="mt-0.5 block truncate text-xs text-zinc-600">{prev.tagline}</span>
             </a>
@@ -144,10 +136,7 @@ const groupTitles: Record<GroupKey, string> = GROUP_LABELS;
               href={next.href}
               class="group rounded-2xl border border-white/8 bg-white/[0.03] p-5 text-right transition-colors hover:border-brand-500/40 hover:bg-brand-500/5 sm:col-start-2"
             >
-              <span class="flex items-center justify-end gap-1.5 text-xs font-semibold uppercase tracking-wider text-zinc-500">
-                下一篇
-                <Icon name="arrowRight" size={14} class="transition-transform group-hover:translate-x-0.5" />
-              </span>
+              <span class="block text-right text-xs font-semibold uppercase tracking-wider text-zinc-500">下一篇</span>
               <span class="mt-2 block font-semibold text-zinc-100 transition-colors group-hover:text-brand-300">{next.title}</span>
               <span class="mt-0.5 block truncate text-xs text-zinc-600">{next.tagline}</span>
             </a>

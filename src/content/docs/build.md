@@ -158,7 +158,7 @@ ctest --test-dir build_linux --output-on-failure
 | 显卡报错/渲染黑屏 | 独显驱动太旧；更新 GPU 驱动，检查是否被系统默认核显接管 |
 | 编译极慢 | 首次全量编译几十分钟到数小时属正常；之后用增量构建 + ccache（`brew/pacman/apt install ccache`）会快很多 |
 | 改代码不生效 | 确认改的是源码而非“已安装版本”；调试时使用 `Debug/RelWithDebInfo` 并重跑 `cmake` |
-| 构建中途失败 | 先 `git pull` 更新到最新再试；仍失败则到官方渠道搜索/提问（见[参与贡献 →](/docs/contribute)） |
+| 构建中途失败 | 先 `git pull` 更新到最新再试；仍失败则到官方渠道搜索/提问（见[参与贡献](/docs/contribute)） |
 
 ## 官方参考（Building Blender 手册）
 
