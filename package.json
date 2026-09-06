@@ -10,7 +10,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",
-    "smoke": "bun scripts/smoke.mjs"
+    "smoke": "bun scripts/smoke.mjs",
+    "deploy": "bun scripts/deploy-pages.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
